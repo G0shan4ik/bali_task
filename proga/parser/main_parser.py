@@ -122,7 +122,7 @@ def schedule(all_links):
             print(f"\n<-- Link: {link} -->\n")
             carousell_parser(link)
             if cnt % 6 == 0:
-                driver.sleep(uniform(240, 300))
+                sleep(uniform(240, 300))
 
         print('\n\nsleep\n\n')
         sleep(uniform(240, 300))
