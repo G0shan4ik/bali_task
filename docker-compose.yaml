@@ -1,0 +1,9 @@
+services:
+  sure:
+    build: .
+    stop_signal: SIGINT
+    container_name: ula
+    restart: "always"
+    shm_size: 2048mb
+    volumes:
+      - ./:/app
