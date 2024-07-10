@@ -61,8 +61,9 @@ def carousell_parser(driver: Driver, data: str) -> None:
     # action = ActionChains(driver)
     # action.move_to_element_with_offset(element, -20, -10).click().perform()
 
-    driver.sleep(16)
-    driver.save_screenshot('dddd.png')
+    driver.sleep(uniform(20, 30))
+
+    # driver.save_screenshot('dddd.png')
 
     # print(driver.run_js("return Array.from(document.querySelectorAll('[data-testid]')).filter(el => el.getAttribute('data-testid').match(/listing-card-\d*$/g))"))
 
@@ -72,6 +73,7 @@ def carousell_parser(driver: Driver, data: str) -> None:
     with open('test.js', 'r', encoding='utf-8') as f:
         code = f.read()
         result = driver.run_js(code)
+
     for dct in result:
         # print(dct)
         # data = card.select_one('img.D_jW.D_RJ')
@@ -113,10 +115,14 @@ def carousell_parser(driver: Driver, data: str) -> None:
 
 
 def schedule(all_links):
+    cnt = 0
     while True:
         for link in all_links:
+            cnt += 1
             print(f"\n<-- Link: {link} -->\n")
             carousell_parser(link)
+            if cnt % 6 == 0:
+                driver.sleep(uniform(240, 300))
 
         print('\n\nsleep\n\n')
         sleep(uniform(240, 300))
