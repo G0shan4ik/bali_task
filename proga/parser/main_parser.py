@@ -116,6 +116,7 @@ def carousell_parser(driver: Driver, data: str) -> None:
 
 def schedule(all_links):
     cnt = 0
+    print("\n\n\n\n\n<--- START --->\n\n\n\n\n")
     while True:
         for link in all_links:
             cnt += 1
