@@ -124,6 +124,8 @@ def schedule(all_links):
             carousell_parser(link)
             if cnt % 6 == 0:
                 sleep(uniform(240, 300))
+            elif cnt % 30 == 0:
+                var = 1 / 0
 
         print('\n\nsleep\n\n')
         sleep(uniform(240, 300))

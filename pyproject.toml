@@ -1,24 +1,24 @@
-    [tool.poetry]
-    name = "proga"
-    version = "0.1.0"
-    description = ""
-    authors = ["Egor <egorkononec64@gmail.com>"]
+[tool.poetry]
+name = "proga"
+version = "0.1.0"
+description = ""
+authors = ["Egor <egorkononec64@gmail.com>"]
 
-    [tool.poetry.dependencies]
-    python = "^3.11"
-    npm = "^0.1.1"
-    cloudscraper = "^1.2.71"
-    botasaurus = "^4.0.44"
-    peewee = "^3.17.5"
-    beautifulsoup4 = "^4.12.3"
-    lxml = "^4"
-    selenium = "^4.22.0"
-
-
-    [tool.poetry.scripts]
-    dev = "main:start_dev"
+[tool.poetry.dependencies]
+python = "^3.11"
+npm = "^0.1.1"
+cloudscraper = "^1.2.71"
+botasaurus = "^4.0.44"
+peewee = "^3.17.5"
+beautifulsoup4 = "^4.12.3"
+lxml = "^4"
+selenium = "^4.22.0"
 
 
-    [build-system]
-    requires = ["poetry-core"]
-    build-backend = "poetry.core.masonry.api"
+[tool.poetry.scripts]
+dev = "main:start_dev"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
