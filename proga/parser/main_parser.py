@@ -122,13 +122,12 @@ def schedule(all_links):
             cnt += 1
             print(f"\n<-- Link: {link} -->\n")
             carousell_parser(link)
-            if cnt % 6 == 0:
-                sleep(uniform(240, 300))
-            elif cnt % 30 == 0:
-                var = 1 / 0
 
         print('\n\nsleep\n\n')
         sleep(uniform(240, 300))
+
+        if cnt > 0:
+            var = 1 / 0
 
 
 if __name__ == '__main__':
