@@ -39,7 +39,6 @@ def check_match(dct: dict) -> bool:
 
 
 @browser(
-    reuse_driver=True,
     block_images_and_css=True,
     raise_exception=True,
     profile='Carousell',
