@@ -5,7 +5,7 @@ description = ""
 authors = ["Egor <egorkononec64@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 npm = "^0.1.1"
 cloudscraper = "^1.2.71"
 botasaurus = "^4.0.44"
