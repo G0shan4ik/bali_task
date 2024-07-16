@@ -42,6 +42,7 @@ def check_match(dct: dict) -> bool:
     block_images_and_css=True,
     raise_exception=True,
     profile='Carousell',
+    add_arguments=['--disable-dev-shm-usage', '--no-sandbox'],
     # headless=True,
 )
 def carousell_parser(driver: Driver, data: str) -> None:
