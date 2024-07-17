@@ -13,5 +13,5 @@ def start_dev():
     # carousell_parser('https://www.carousell.ph/search/rick%20owens?sort_by=3')
     while True:
         schedule(all_links=all_links)
-        sleep(uniform(360, 400))
+        sleep(400)
 
