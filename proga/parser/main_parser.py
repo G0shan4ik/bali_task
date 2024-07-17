@@ -39,7 +39,6 @@ def check_match(dct: dict) -> bool:
 
 
 @browser(
-    block_images_and_css=True,
     raise_exception=True,
     profile='Carousell',
     add_arguments=['--disable-dev-shm-usage', '--no-sandbox'],
@@ -124,10 +123,8 @@ def schedule(all_links):
             carousell_parser(link)
 
         print('\n\nsleep\n\n')
-        sleep(uniform(240, 300))
 
-        if cnt > 0:
-            var = 1 / 0
+        break
 
 
 if __name__ == '__main__':
