@@ -15,3 +15,6 @@ def start_dev():
         schedule(all_links=all_links)
         sleep(400)
 
+
+if __name__ == '__main__':
+    start_dev()

@@ -40,9 +40,12 @@ def check_match(dct: dict) -> bool:
 
 @browser(
     raise_exception=True,
-    profile='Carousell',
-    add_arguments=['--disable-dev-shm-usage', '--no-sandbox'],
+    # profile='Carousell',
+    # add_arguments=['--disable-dev-shm-usage', '--no-sandbox'],
     # headless=True,
+    add_arguments=['--disable-extensions', '--disable-application-cache', '--disable-gpu', '--no-sandbox',
+                   '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+
 )
 def carousell_parser(driver: Driver, data: str) -> None:
     # driver.run_js('''
@@ -125,8 +128,3 @@ def schedule(all_links):
         print('\n\nsleep\n\n')
 
         break
-
-
-if __name__ == '__main__':
-    # scrape_html('https://www.carousell.ph/search/rick%20owens?sort_by=3')
-    carousell_parser('https://www.carousell.ph/search/rick%20owens?sort_by=3')
