@@ -44,8 +44,8 @@ def check_match(dct: dict) -> bool:
     # add_arguments=['--disable-dev-shm-usage', '--no-sandbox'],
     # headless=True,
     add_arguments=['--disable-extensions', '--disable-application-cache', '--disable-gpu', '--no-sandbox',
-                   '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-
+                   '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+    reuse_driver=True,
 )
 def carousell_parser(driver: Driver, data: str) -> None:
     # driver.run_js('''
