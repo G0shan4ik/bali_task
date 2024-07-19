@@ -39,7 +39,7 @@ def check_match(dct: dict) -> bool:
 
 
 @browser(
-    raise_exception=True,
+    # raise_exception=True,
     # profile='Carousell',
     # add_arguments=['--disable-dev-shm-usage', '--no-sandbox'],
     # headless=True,
