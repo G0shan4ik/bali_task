@@ -56,7 +56,9 @@ def carousell_parser(driver: Driver, data: str) -> None:
     #             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Proxy;
     #             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;''')
     # driver.google_get(data)
-    driver.get_via(data, 'https://www.carousell.ph')
+    link, fl = data.split('#')
+    driver.get_via(link, 'https://www.carousell.ph')
+    # driver.prompt()
     #  <-- Cloudflare -->
 
     # element = driver.select('h1')
@@ -115,6 +117,11 @@ def carousell_parser(driver: Driver, data: str) -> None:
                 }
             )
 
+    if fl == 'close':
+        driver.close()
+
+    return
+
 
 def schedule(all_links):
     cnt = 0
@@ -122,8 +129,9 @@ def schedule(all_links):
     while True:
         for link in all_links:
             cnt += 1
-            print(f"\n<-- Link: {link} -->\n")
-            carousell_parser(link)
+            print(f"\n<-- Link: {link} - Num: {all_links.index(link) + 1}-->\n")
+            u = f"{link}#reuse" if len(all_links) != all_links.index(link) + 1 else f"{link}#close"
+            carousell_parser(u)
 
         print('\n\nsleep\n\n')
 
