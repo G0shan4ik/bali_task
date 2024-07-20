@@ -11,7 +11,7 @@ with open('links', 'r', encoding='utf8') as f:
 def start_dev():
     while True:
         schedule(all_links=all_links)
-        sleep(4)
+        sleep(500)
 
 
 if __name__ == '__main__':
