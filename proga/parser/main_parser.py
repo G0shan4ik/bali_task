@@ -83,7 +83,7 @@ def schedule(all_links):
     cnt = 0
     print("\n\n\n\n\n<--- START --->\n\n\n\n\n")
     while True:
-        for link in all_links[-1:]:
+        for link in all_links:
             cnt += 1
             print(f"\n<-- Link: {link} - Num: {all_links.index(link) + 1}-->\n")
             # u = f"{link}#reuse" if len(all_links) != all_links.index(link) + 1 else f"{link}#close"
