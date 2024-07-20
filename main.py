@@ -9,11 +9,9 @@ with open('links', 'r', encoding='utf8') as f:
     all_links: list[str] = list(map(lambda item: item.replace('\n', ''), f.readlines()))
 
 def start_dev():
-    init()
-    # carousell_parser('https://www.carousell.ph/search/rick%20owens?sort_by=3')
     while True:
         schedule(all_links=all_links)
-        sleep(400)
+        sleep(4)
 
 
 if __name__ == '__main__':

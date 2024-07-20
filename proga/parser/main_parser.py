@@ -2,102 +2,58 @@ import json
 
 from botasaurus.browser import browser, Driver
 from requests import request
-from selenium.webdriver import ActionChains
 
-from proga.database import Products
-from bs4 import BeautifulSoup
-import lxml
+from pyairtable import Table
 
-from time import sleep
-from random import uniform
+from random import randint
+
+
+AIRTABLE_TOKEN = 'patGlHaDBAM9XQBxg.96fcbaa9fdb4c971731ccf5dd9cefa7ccc3842a0c74435f3b053b7e26d97eef3'
+AIRTABLE_BASE_ID = 'appP155mkCHYI28rl'
+AIRTABLE_URL = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}"
+
+url = f"{AIRTABLE_URL}/carousell_table?maxRecords=300&offset"
+headers = {
+    'Authorization': f'Bearer {AIRTABLE_TOKEN}',
+    'Content-Type': 'application/json',
+}
 
 
 def send_to_airtable(data: dict):
-    AIRTABLE_TOKEN = 'patGlHaDBAM9XQBxg.96fcbaa9fdb4c971731ccf5dd9cefa7ccc3842a0c74435f3b053b7e26d97eef3'
-    AIRTABLE_BASE_ID = 'appP155mkCHYI28rl'
-    AIRTABLE_URL = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}"
-
-    url = f"{AIRTABLE_URL}/carousell_table"
-    headers = {
-        'Authorization': f'Bearer {AIRTABLE_TOKEN}',
-        'Content-Type': 'application/json'
-    }
-
     response = request("POST", url, headers=headers, data=json.dumps(data))
+    request('DELETE', url, headers=headers)
 
     return response
 
 
-def check_match(dct: dict) -> bool:
-    _select = Products.select().where(Products.unique_id == dct['unique_id'])
-    if _select.exists():
-        print(True)
-        return True
-    Products.create(**dct)
-    print(False)
-    return False
+def get_all_table_urls() -> list[str]:
+    table = Table(api_key=AIRTABLE_TOKEN, base_id=AIRTABLE_BASE_ID, table_name='carousell_table')
+    records = table.all()
+
+    return [f"{item['fields']['URL']}" for item in records]
 
 
 @browser(
-    # raise_exception=True,
-    # profile='Carousell',
-    # add_arguments=['--disable-dev-shm-usage', '--no-sandbox'],
-    # headless=True,
     add_arguments=['--disable-extensions', '--disable-application-cache', '--disable-gpu', '--no-sandbox',
                    '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-    reuse_driver=True,
+    profile='Carousell'
 )
 def carousell_parser(driver: Driver, data: str) -> None:
-    # driver.run_js('''
-    #             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
-    #             delete window.cdc_adoQpoasnfa76pfcZLmcfl_JSON;
-    #             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Object;
-    #             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
-    #             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Proxy;
-    #             delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;''')
-    # driver.google_get(data)
-    link, fl = data.split('#')
-    driver.get_via(link, 'https://www.carousell.ph')
+    driver.get_via(data, 'https://www.carousell.ph')
     # driver.prompt()
     #  <-- Cloudflare -->
-
-    # element = driver.select('h1')
-    # action = ActionChains(driver)
-    # action.move_to_element_with_offset(element, -20, -10).click().perform()
-
-    driver.sleep(uniform(20, 30))
-
+    driver.sleep(randint(25, 30))
     # driver.save_screenshot('dddd.png')
-
-    # print(driver.run_js("return Array.from(document.querySelectorAll('[data-testid]')).filter(el => el.getAttribute('data-testid').match(/listing-card-\d*$/g))"))
-
-    # driver.run_js('window.scrollTo(0, 2500)')
 
     # soup = BeautifulSoup(driver.page_html, 'lxml')
     with open('test.js', 'r', encoding='utf-8') as f:
         code = f.read()
         result = driver.run_js(code)
 
+    data_ = get_all_table_urls()
     for dct in result:
-        # print(dct)
-        # data = card.select_one('img.D_jW.D_RJ')
-        # __id = int(card.select_one('div.D_nS').get('data-testid').split('-')[-1])
-        # dct = {
-        #     'unique_id': __id,
-        #     'name': card.select_one('img.D_lm.D_RG').get('title'),
-        #     'price': int(card.select_one('p.D_jY.D_jZ.D_ke.D_kg.D_kk.D_kn.D_ku').text.replace('PHP ', '').replace(',', '')),
-        #     'image': card.select_one('img.D_lm.D_RG').get('src').replace('_progressive_thumbnail', ''),
-        #     'url': f"https://www.carousell.ph/p/{__id}" document.querySelector("#main > div.D_Gz > div > section.D_GL > div.D_GQ > div > div > div:nth-child(2) > div:nth-child(2) > div > div.D_nv > a:nth-child(2)")
-        # }
-        # dct = {
-        #     'unique_id': __id,
-        #     'name': card.select_one('img.D_lm.D_RG').get('title'),
-        #     'price': int(card.select_one('p.D_jY.D_jZ.D_ke.D_kg.D_kk.D_kn.D_ku').text.replace('PHP ', '').replace(',', '')),
-        #     'image': card.select_one('//*[@id="img-0"]'),
-        #     'url': f"https://www.carousell.ph/p/{__id}"
-        # }
-
-        if not check_match(dct=dct):
+        print(dct['url'] not in data_)
+        if dct['url'] not in data_:
             print(dct)
             send_to_airtable(data={
                     "records": [
@@ -117,8 +73,8 @@ def carousell_parser(driver: Driver, data: str) -> None:
                 }
             )
 
-    if fl == 'close':
-        driver.close()
+    # if fl == 'close':
+    #     driver.close()
 
     return
 
@@ -127,11 +83,11 @@ def schedule(all_links):
     cnt = 0
     print("\n\n\n\n\n<--- START --->\n\n\n\n\n")
     while True:
-        for link in all_links:
+        for link in all_links[-1:]:
             cnt += 1
             print(f"\n<-- Link: {link} - Num: {all_links.index(link) + 1}-->\n")
-            u = f"{link}#reuse" if len(all_links) != all_links.index(link) + 1 else f"{link}#close"
-            carousell_parser(u)
+            # u = f"{link}#reuse" if len(all_links) != all_links.index(link) + 1 else f"{link}#close"
+            carousell_parser(link)
 
         print('\n\nsleep\n\n')
 

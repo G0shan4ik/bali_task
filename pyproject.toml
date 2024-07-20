@@ -13,6 +13,7 @@ peewee = "^3.17.5"
 beautifulsoup4 = "^4.12.3"
 lxml = "^4"
 selenium = "^4.22.0"
+pyairtable = "^2.3.3"
 
 
 [tool.poetry.scripts]
