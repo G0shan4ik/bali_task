@@ -9,9 +9,9 @@ RUN apt update -y && apt install gcc -y
 COPY pyproject.toml .
 RUN apt-get install xvfb
 RUN Xvfb :99 -screen 0 1024x768x16 & export DISPLAY=:99
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i --force-depends google-chrome-stable_current_amd64.deb
-RUN apt-get install -f
+
+RUN rm $(which google-chrome-stable)
+RUN apt install chromium-browser
 
 RUN rm -rf build
 RUN poetry install
