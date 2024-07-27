@@ -3,6 +3,7 @@ from proga.parser.main_parser import schedule
 from proga.parser.main_parser import carousell_parser
 
 from time import sleep
+from random import randint
 
 
 with open('links', 'r', encoding='utf8') as f:
@@ -11,7 +12,7 @@ with open('links', 'r', encoding='utf8') as f:
 def start_dev():
     while True:
         schedule(all_links=all_links)
-        sleep(500)
+        sleep(randint(550, 900))
 
 
 if __name__ == '__main__':
