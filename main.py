@@ -1,6 +1,4 @@
-from proga.database import init
 from proga.parser.main_parser import schedule
-from proga.parser.main_parser import carousell_parser
 
 from time import sleep
 from random import randint
@@ -13,7 +11,3 @@ def start_dev():
     while True:
         schedule(all_links=all_links)
         sleep(randint(550, 900))
-
-
-if __name__ == '__main__':
-    start_dev()

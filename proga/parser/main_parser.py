@@ -40,12 +40,9 @@ def get_all_table_urls() -> list[str]:
 )
 def carousell_parser(driver: Driver, data: str) -> None:
     driver.get_via(data, 'https://www.carousell.ph')
-    # driver.prompt()
     #  <-- Cloudflare -->
     driver.sleep(randint(25, 30))
-    # driver.save_screenshot('dddd.png')
 
-    # soup = BeautifulSoup(driver.page_html, 'lxml')
     with open('test.js', 'r', encoding='utf-8') as f:
         code = f.read()
         result = driver.run_js(code)
@@ -72,10 +69,6 @@ def carousell_parser(driver: Driver, data: str) -> None:
                     ]
                 }
             )
-
-    # if fl == 'close':
-    #     driver.close()
-
     return
 
 
@@ -86,7 +79,6 @@ def schedule(all_links):
         for link in all_links:
             cnt += 1
             print(f"\n<-- Link: {link} - Num: {all_links.index(link) + 1}-->\n")
-            # u = f"{link}#reuse" if len(all_links) != all_links.index(link) + 1 else f"{link}#close"
             carousell_parser(link)
 
         print('\n\nsleep\n\n')
