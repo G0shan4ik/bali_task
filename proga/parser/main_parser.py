@@ -34,8 +34,8 @@ def get_all_table_urls() -> list[str]:
 
 
 @browser(
-    add_arguments=['--disable-extensions', '--disable-application-cache', '--disable-gpu', '--no-sandbox',
-                   '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+    add_arguments=['--disable-extensions', '--disable-application-cache', '--disable-gpu', '--no-sandbox',  '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+    close_on_crash=True,
     profile='Carousell'
 )
 def carousell_parser(driver: Driver, data: str) -> None:

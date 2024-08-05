@@ -10,6 +10,7 @@ COPY pyproject.toml .
 RUN apt-get install xvfb
 RUN Xvfb :99 -screen 0 1024x768x16 & export DISPLAY=:99
 
+RUN apt-get install -f
 RUN rm $(which google-chrome-stable)
 RUN apt-get update
 RUN apt-get install chromium -y
@@ -19,5 +20,5 @@ RUN poetry install
 
 RUN npm install -g npm@10.4.0
 
-#ENTRYPOINT ["poetry", "run", "dev"]
-CMD ["python", "main.py"]
+ENTRYPOINT ["poetry", "run", "dev"]
+#CMD ["python", "main.py"]
