@@ -78,7 +78,7 @@ def carousell_parser(data: str):
         url='https://app.scrapingbee.com/api/v1/',
         params={
             'api_key': 'KB7FUUC6C41UNZK19DIHNAICI6X9EGVOZ2VO0LCSF2RHLQL5IJLH92G66UK02OCABQASD16MUW0PKE3D',
-            'url': 'https://www.carousell.ph/search/rick%20owens',
+            'url': data,
             'premium_proxy': 'true',
             'country_code': 'sg'
         },
