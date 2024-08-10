@@ -89,9 +89,11 @@ def carousell_parser(data: str):
     soup = BeautifulSoup(response.text, 'lxml')
     for item in soup.select('div[data-testid*=listing-card]'):
         __id = int(item.select('a')[-1].get('href').split('/')[2].split('-')[-1])
+        print(item.select('img')[-1].get('src').replace('_progressive_thumbnail', ''))
+        print(item.select('img')[-1].get('src'))
         result.append({
             "unique_id": __id,
-            "image": item.select('img')[-1].get('src'),
+            "image": item.select('img')[-1].get('src').replace('_progressive_thumbnail', ''),
             "name": item.select('p')[2].text,
             "price": int(item.select('p')[3].text.replace('PHP ', '').replace(',', '')),
             "url": f"https://www.carousell.ph/p/{__id}",
