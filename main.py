@@ -10,4 +10,4 @@ with open('links', 'r', encoding='utf8') as f:
 def start_dev():
     while True:
         schedule(all_links=all_links)
-        sleep(randint(1200, 2000))
+        sleep(randint(1069, 1777))

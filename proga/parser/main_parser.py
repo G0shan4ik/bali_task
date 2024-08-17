@@ -1,13 +1,13 @@
 import json
 
 import requests
-from botasaurus.browser import browser, Driver
 from bs4 import BeautifulSoup
 from requests import request
+import lxml
 
 from pyairtable import Table
 
-from random import randint
+from time import sleep
 
 
 AIRTABLE_TOKEN = 'patGlHaDBAM9XQBxg.96fcbaa9fdb4c971731ccf5dd9cefa7ccc3842a0c74435f3b053b7e26d97eef3'
@@ -33,6 +33,51 @@ def get_all_table_urls() -> list[str]:
     records = table.all()
 
     return [f"{item['fields']['URL']}" for item in records]
+
+
+def update_dict(dct: dict) -> dict:
+    response = requests.get(
+        url='https://app.scrapingbee.com/api/v1/',
+        params={
+            'api_key': 'KB7FUUC6C41UNZK19DIHNAICI6X9EGVOZ2VO0LCSF2RHLQL5IJLH92G66UK02OCABQASD16MUW0PKE3D',
+            'url': dct['true_url'],
+            'premium_proxy': 'true',
+            'country_code': 'sg',
+            'wait': '1000'
+        },
+
+    )
+
+    soup = BeautifulSoup(response.text, 'lxml')
+
+    images = soup.select_one('div#FieldSetGroup-Container-photo_group').select('img')
+    brand_size = soup.select_one('div#FieldSetField-Container-field_description_info').select('span')
+    descr = soup.select_one('div#FieldSetField-Container-field_description').text.replace('\n', ' ').strip()
+
+    cramps = [item.text for item in soup.select_one('ul[data-testid="new-listing-details-page-desktop-breadcrumbs"]').select('a')]
+    gender, category, subcategory = '-', '-', '-'
+    try:
+        gender, category, subcategory = cramps
+    except:
+        try:
+            gender, category = cramps
+        except:
+            try:
+                gender = cramps[0]
+            except:
+                ...
+
+    dct["Gender"] = gender
+    dct["Category"] = category
+    dct["Subcategory"] = subcategory
+    dct["Images"] = [item.get('src') for item in images]
+    dct["Condition"] = f"{soup.select_one('div#FieldSetField-Container-field_condition_with_action').text}"
+    dct["Location"] = f"{soup.select_one('div#FieldSetField-Container-field_sticky_info').select('p')[-1].text}"
+    dct["Brand"] = f"{brand_size[-2].text}"
+    dct["Size"] = f"{brand_size[-1].text}"
+    dct["Description"] = descr
+
+    return dct
 
 
 # @browser(
@@ -84,19 +129,23 @@ def carousell_parser(data: str):
         },
 
     )
+    # with open("index.html", "r", encoding='utf-8') as f:
+    #     content = f.read()
     result: list[dict] = []
 
     soup = BeautifulSoup(response.text, 'lxml')
+    # soup = BeautifulSoup(content, 'lxml')
+
     for item in soup.select('div[data-testid*=listing-card]'):
         __id = int(item.select('a')[-1].get('href').split('/')[2].split('-')[-1])
-        print(item.select('img')[-1].get('src').replace('_progressive_thumbnail', ''))
-        print(item.select('img')[-1].get('src'))
+
         result.append({
+            "true_url": f"https://www.carousell.ph{item.select('a')[1].get('href')}",
             "unique_id": __id,
-            "image": item.select('img')[-1].get('src').replace('_progressive_thumbnail', ''),
             "name": item.select('p')[2].text,
             "price": int(item.select('p')[3].text.replace('PHP ', '').replace(',', '')),
             "url": f"https://www.carousell.ph/p/{__id}",
+            "Seller": f'''@{item.select_one('p[data-testid="listing-card-text-seller-name"]').text}'''
         })
         continue
 
@@ -104,7 +153,11 @@ def carousell_parser(data: str):
     for dct in result:
         print(dct['url'] not in data_)
         if dct['url'] not in data_:
-            print(dct)
+
+            dct = update_dict(dct)  # new func
+
+            # print(dct)
+
             send_to_airtable(data={
                     "records": [
                         {
@@ -112,16 +165,22 @@ def carousell_parser(data: str):
                                 "Name": dct['name'],
                                 "Price": dct['price'],
                                 "URL": dct['url'],
-                                "Photo": [
-                                    {
-                                        "url": dct['image'],
-                                    }
-                                ]
+                                "Photo": [{"url": item} for item in dct["Images"]],
+                                "Gender": dct["Gender"],
+                                "Category": dct["Category"],
+                                "Subcategory": dct["Subcategory"],
+                                "Condition": dct["Condition"],
+                                "Location": dct["Location"],
+                                "Brand": dct["Brand"],
+                                "Size": dct["Size"],
+                                "Description": dct["Description"],
+                                "Seller": dct["Seller"],
                             }
                         }
                     ]
                 }
             )
+            sleep(1000)
         else:
             break
     return
