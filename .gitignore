@@ -2,3 +2,4 @@ profiles
 output
 error_logs
 poetry.lock
+.env

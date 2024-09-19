@@ -10,8 +10,9 @@ from pyairtable import Table
 from time import sleep
 
 
-AIRTABLE_TOKEN = 'patGlHaDBAM9XQBxg.96fcbaa9fdb4c971731ccf5dd9cefa7ccc3842a0c74435f3b053b7e26d97eef3'
-AIRTABLE_BASE_ID = 'appP155mkCHYI28rl'
+API_KEY = ""
+AIRTABLE_TOKEN = ''
+AIRTABLE_BASE_ID = ''
 AIRTABLE_URL = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}"
 
 url = f"{AIRTABLE_URL}/carousell_table?maxRecords=300&offset"
@@ -39,7 +40,7 @@ def update_dict(dct: dict) -> dict:
     response = requests.get(
         url='https://app.scrapingbee.com/api/v1/',
         params={
-            'api_key': 'KB7FUUC6C41UNZK19DIHNAICI6X9EGVOZ2VO0LCSF2RHLQL5IJLH92G66UK02OCABQASD16MUW0PKE3D',
+            'api_key': API_KEY,
             'url': dct['true_url'],
             'premium_proxy': 'true',
             'country_code': 'sg',
@@ -122,7 +123,7 @@ def carousell_parser(data: str):
     response = requests.get(
         url='https://app.scrapingbee.com/api/v1/',
         params={
-            'api_key': 'KB7FUUC6C41UNZK19DIHNAICI6X9EGVOZ2VO0LCSF2RHLQL5IJLH92G66UK02OCABQASD16MUW0PKE3D',
+            'api_key': API_KEY,
             'url': data,
             'premium_proxy': 'true',
             'country_code': 'sg'
